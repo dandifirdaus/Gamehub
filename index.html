@@ -51,9 +51,56 @@ const data=[
 {n:"Minecraft",c:"PC",d:"Bangun dunia sesuai imajinasimu.",i:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600",u:"https://www.minecraft.net/"}
 ];
 let category="Semua";
-function renderFilters(){document.getElementById("filters").innerHTML=["Semua","PC","Android","PlayStation"].map(c=>'<button class="'+(category===c?'active':'')+'" onclick="category='+JSON.stringify(c)+';render()">'+c+'</button>').join("")}
-function render(){renderFilters();let q=document.getElementById("search").value.toLowerCase();let list=data.filter(g=>(category==="Semua"||g.c===category)&&(g.n.toLowerCase().includes(q)||g.d.toLowerCase().includes(q)));document.getElementById("games").innerHTML=list.map(g=>'<article class="card"><img src="'+g.i+'" alt="'+g.n+'" loading="lazy"><div class="info"><span class="tag">'+g.c+'</span><h3>'+g.n+'</h3><p>'+g.d+'</p><a class="play" href="'+g.u+'" target="_blank" rel="noopener">Kunjungi situs ↗</a></div></article>').join("")||"<p>Game tidak ditemukan.</p>"}
-render();
-</script>
+
+function renderFilters() {
+  const filters = document.getElementById("filters");
+
+  filters.innerHTML = ["Semua", "PC", "Android", "PlayStation"]
+    .map(c => {
+      const button = document.createElement("button");
+      button.textContent = c;
+
+      if (category === c) {
+        button.classList.add("active");
+      }
+
+      button.onclick = () => {
+        category = c;
+        render();
+      };
+
+      return button.outerHTML;
+    })
+    .join("");
+}
+
+function render() {
+  renderFilters();
+
+  const q = document.getElementById("search").value.toLowerCase();
+
+  const list = data.filter(g =>
+    (category === "Semua" || g.c === category) &&
+    (g.n.toLowerCase().includes(q) ||
+     g.d.toLowerCase().includes(q))
+  );
+
+  document.getElementById("games").innerHTML = list
+    .map(g => `
+      <article class="card">
+        <img src="${g.i}" alt="${g.n}" loading="lazy">
+        <div class="info">
+          <span class="tag">${g.c}</span>
+          <h3>${g.n}</h3>
+          <p>${g.d}</p>
+          <a class="play" href="${g.u}" target="_blank" rel="noopener">
+            Kunjungi situs ↗
+          </a>
+        </div>
+      </article>
+    `)
+    .join("") || "<p>Game tidak ditemukan.</p>";
+}
+
 </body>
 </html>
